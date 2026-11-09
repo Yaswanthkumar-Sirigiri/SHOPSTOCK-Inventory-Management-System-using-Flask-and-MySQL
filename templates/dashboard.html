@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<!-- Summary cards -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="box stat">
+      <div class="stat-icon" style="background:#e0ecff"></div>
+      <div><div class="stat-label">Total Products</div>
+           <div class="stat-value">{{ total_products }}</div></div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="box stat">
+      <div class="stat-icon" style="background:#d9f7e3"></div>
+      <div><div class="stat-label">Stock Units</div>
+           <div class="stat-value">{{ total_units }}</div></div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="box stat">
+      <div class="stat-icon" style="background:#fee2e2"></div>
+      <div><div class="stat-label">Low Stock Items</div>
+           <div class="stat-value">{{ low_stock|length }}</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent products -->
+<div class="box">
+  <div class="d-flex justify-content-between mb-3">
+    <h2 class="h6 fw-bold mb-0">Recent Products</h2>
+    <a href="{{ url_for('add_product') }}" class="small fw-bold text-decoration-none">+ Add Product</a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr><th>Product</th><th>Category</th><th>Quantity</th><th>Price</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      {% for p in recent %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td>{{ p.category }}</td>
+        <td>{{ p.quantity }}</td>
+        <td>₹{{ "%.2f"|format(p.price) }}</td>
+        <td>
+          {% if p.quantity < limit %}
+            <span class="low-stock-text">Low Stock</span>
+          {% else %}
+            <span class="in-stock">In Stock</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-muted">No products yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
